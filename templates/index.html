@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Search Engine</h1>
+    </header>
+
+    <main>
+        <h2>Search Form:</h2>
+
+        <form action="/search" method="post">
+            <label for="search_query">Masukkan kata yang ingin dicari:</label>
+            <input type="text" name="search_query" id="search_query" required>
+            <div class="button-area"> 
+            <button type="submit">Search</button>
+            <button type="button" class="reset-button" onclick="clearResults()">Clear Results</button>
+            </div>
+        </form>
+
+        <section class="result-area">
+            <h2>Search Results:</h2>
+            <div class="inner-area">
+            {% if results %}
+                <div class="result-info">
+                    <p>
+                        <strong>Kata yang dicari:</strong> {{ word_search }}<br>
+                        <strong>Jumlah dokumen dengan kata kunci:</strong> {{ word_hits }}<br>
+                        <strong>Waktu pencarian:</strong> {{ search_time|round(5) }} detik<br>
+                        <strong>Waktu eksekusi total:</strong> {{ run_time|round(5) }} detik
+                    </p>
+                </div>
+
+                <div class="result-docs">
+                    <ol>
+                        {% for result in results %}
+                            <li class="result-item">
+                                <div class="docs">
+                                    <strong>Filename:</strong> {{ result['filename'] }}<br>
+                                    <strong>Similarity:</strong> {{ result['similarity']|round(4) }}<br>
+                                    <strong>Word Found:</strong> {{ result['found_words'] }}<br>
+                                    <strong>URL:</strong> <a href="{{ result['url'] }}" target="_blank">{{ result['url'] }}</a>
+
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <!-- Add this script at the bottom of your HTML body -->
+    <script>
+        function clearResults() {
+            // You can use JavaScript to clear or hide the results
+            // For example, assuming you have a div with the class "result-docs"
+            var innerArea = document.querySelector('.inner-area');
+            innerArea.innerHTML = ''; // This clears the content of the result area
+        }
+    </script>
+
+</body>
+</html>

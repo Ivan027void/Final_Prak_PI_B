@@ -77,3 +77,37 @@ nltk_stopwords = set(stopwords.words('indonesian'))
 
 # Combine stopwords
 stopword_lists = [custom_stopwords, sastrawi_stopwords, nltk_stopwords]
+
+
+
+# Example usage
+query = input("Masukkan kata yang ingin dicari: ")
+
+print("\nSearching...")
+start_time = time.time()
+results, query_tokens = search(query, vectorizer, tfidf_matrix, filenames, url_to_document, tokenized_documents, stopword_lists)
+end_time = time.time()
+
+# Number of documents found is the length of the results
+num_documents_found = len(results)
+
+# Output additional information
+word_search = ' '.join(query_tokens)
+word_hits = num_documents_found
+search_time = end_time - start_time
+run_time = time.time() - start_time
+
+# Print the results
+print("\n************************")
+print("Search Results:")
+for result in results:
+    print(f"Filename: {result['filename']}")
+    print(f"Similarity: {result['similarity']:.4f}")
+    print(f"URL: {result['url']}")
+    print()
+
+print("\n***********************************************")
+print(f"Kata yang dicari: {word_search}")
+print(f"Jumlah dokumen dengan kata kunci: {word_hits}")
+print(f"Waktu pencarian: {search_time:.5f} detik")
+print(f"Waktu eksekusi total: {run_time:.5f} detik")
